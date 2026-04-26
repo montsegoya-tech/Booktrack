@@ -47,8 +47,10 @@ export default function Sidebar({ username }: { username?: string }) {
     router.push("/login");
   }
 
-  function buildLibraryUrl(params: Record<string, string>) {
-    const p = new URLSearchParams(params);
+  function buildFilterUrl(key: string, value: string) {
+    const p = new URLSearchParams(searchParams.toString());
+    if (value) p.set(key, value); else p.delete(key);
+    p.delete("page");
     return `/library?${p.toString()}`;
   }
 
@@ -75,7 +77,7 @@ export default function Sidebar({ username }: { username?: string }) {
           {STATUS_LINKS.map((s) => (
             <Link
               key={s.value}
-              href={buildLibraryUrl(s.value ? { status: s.value } : {})}
+              href={buildFilterUrl("status", s.value)}
               className={cn(
                 "flex items-center px-3 py-1.5 rounded-md text-sm transition-colors",
                 currentStatus === s.value
@@ -96,7 +98,7 @@ export default function Sidebar({ username }: { username?: string }) {
             return (
               <Link
                 key={g.value}
-                href={buildLibraryUrl(current === g.value ? {} : { genre: g.value })}
+                href={buildFilterUrl("genre", current === g.value ? "" : g.value)}
                 className={cn(
                   "flex items-center px-3 py-1.5 rounded-md text-sm transition-colors",
                   current === g.value
@@ -118,7 +120,7 @@ export default function Sidebar({ username }: { username?: string }) {
             return (
               <Link
                 key={l.value}
-                href={buildLibraryUrl(current === l.value ? {} : { language: l.value })}
+                href={buildFilterUrl("language", current === l.value ? "" : l.value)}
                 className={cn(
                   "flex items-center px-3 py-1.5 rounded-md text-sm transition-colors",
                   current === l.value

@@ -3,8 +3,6 @@ import { db } from "@/lib/db";
 import { books } from "@/lib/db/schema";
 import { eq, and } from "drizzle-orm";
 import { getSession } from "@/lib/auth/session";
-import { getWorkDetails } from "@/lib/openlibrary/client";
-import { extractDescription } from "@/lib/openlibrary/helpers";
 import { searchGoogleBooks, getGoogleBooksVolume } from "@/lib/googlebooks/client";
 
 export async function POST(
@@ -19,86 +17,48 @@ export async function POST(
     const [book] = await db.select().from(books).where(and(eq(books.id, id), eq(books.userId, session.userId))).limit(1);
     if (!book) return Response.json({ error: "Libro no encontrado" }, { status: 404 });
 
-    const updates: { synopsis?: string; genres?: string[] } = {};
-
-    // 1. Try Open Library (only if olWorkId is a real OL ID)
-    if (book.olWorkId && !book.olWorkId.startsWith("gb:") && !book.olWorkId.startsWith("manual:")) {
-      try {
-        const work = await getWorkDetails(book.olWorkId);
-        if (!book.synopsis) {
-          const synopsis = extractDescription(work.description);
-          if (synopsis) updates.synopsis = synopsis;
-        }
-        if (!book.genres?.length && work.subjects?.length) {
-          updates.genres = work.subjects.slice(0, 8);
-        }
-      } catch {
-        // Open Library failed, continue to Google Books
-      }
+    if (!process.env.GOOGLE_BOOKS_API_KEY) {
+      console.warn("[refetch] GOOGLE_BOOKS_API_KEY not set");
+      return Response.json({ updated: false, message: "Configura GOOGLE_BOOKS_API_KEY en Vercel" });
     }
 
-    // 2. Fall back to Google Books if still missing data
-    const stillMissingSynopsis = !book.synopsis && !updates.synopsis;
-    const stillMissingGenres = !book.genres?.length && !updates.genres;
+    const updates: { synopsis?: string; genres?: string[] } = {};
 
-    if (stillMissingSynopsis || stillMissingGenres) {
-      if (!process.env.GOOGLE_BOOKS_API_KEY) {
-        console.warn("[refetch] GOOGLE_BOOKS_API_KEY not set — skipping Google Books");
-        return Response.json({
-          updated: false,
-          message: "Configura GOOGLE_BOOKS_API_KEY en Vercel para usar Google Books",
-        });
+    const queries = book.isbn
+      ? [`isbn:${book.isbn}`, `intitle:${book.title} inauthor:${book.author}`]
+      : [`intitle:${book.title} inauthor:${book.author}`, `${book.title} ${book.author}`];
+
+    outer: for (const query of queries) {
+      let gbRes;
+      try {
+        gbRes = await searchGoogleBooks(query);
+      } catch (err) {
+        console.error("[refetch] search error:", err);
+        continue;
       }
 
-      try {
-        const queries = book.isbn
-          ? [
-              `isbn:${book.isbn}`,
-              `intitle:${book.title} inauthor:${book.author}`,
-              `${book.title} ${book.author}`,
-            ]
-          : [
-              `intitle:${book.title} inauthor:${book.author}`,
-              `${book.title} ${book.author}`,
-            ];
+      for (const volume of gbRes.items ?? []) {
+        let { description, categories } = volume.volumeInfo;
 
-        outer: for (const query of queries) {
-          const gbRes = await searchGoogleBooks(query);
-          for (const volume of gbRes.items ?? []) {
-            const info = volume.volumeInfo;
-
-            let description = info.description;
-            let categories = info.categories;
-            if ((stillMissingSynopsis && !updates.synopsis && !description) ||
-                (stillMissingGenres && !updates.genres && !categories?.length)) {
-              try {
-                const detail = await getGoogleBooksVolume(volume.id);
-                description = detail.volumeInfo.description ?? description;
-                categories = detail.volumeInfo.categories ?? categories;
-              } catch {
-                // detail fetch failed, use what we have
-              }
-            }
-
-            if (stillMissingSynopsis && !updates.synopsis && description) {
-              updates.synopsis = description;
-            }
-            if (stillMissingGenres && !updates.genres && categories?.length) {
-              updates.genres = categories.slice(0, 8);
-            }
-            if (
-              (!stillMissingSynopsis || updates.synopsis) &&
-              (!stillMissingGenres || updates.genres)
-            ) break outer;
+        if (!description || !categories?.length) {
+          try {
+            const detail = await getGoogleBooksVolume(volume.id);
+            description = detail.volumeInfo.description ?? description;
+            categories = detail.volumeInfo.categories ?? categories;
+          } catch {
+            // use what we have
           }
         }
-      } catch (err) {
-        console.error("[refetch] Google Books error:", err);
+
+        if (description && !updates.synopsis) updates.synopsis = description;
+        if (categories?.length && !updates.genres) updates.genres = categories.slice(0, 8);
+
+        if (updates.synopsis && updates.genres) break outer;
       }
     }
 
     if (Object.keys(updates).length === 0) {
-      return Response.json({ updated: false, message: "No hay datos disponibles en ninguna fuente" });
+      return Response.json({ updated: false, message: "Google Books no tiene datos para este libro" });
     }
 
     const [updated] = await db

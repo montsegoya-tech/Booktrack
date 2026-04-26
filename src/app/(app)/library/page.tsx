@@ -37,7 +37,7 @@ export default async function LibraryPage({
   const conditions = [eq(books.userId, session.userId)];
   if (status) conditions.push(eq(books.status, status as BookSelect["status"]));
   if (format) conditions.push(eq(books.format, format as BookSelect["format"]));
-  if (selectedGenres.length > 0) conditions.push(sql`${books.genres} && ARRAY[${sql.join(selectedGenres.map(g => sql`${g}`), sql`, `)}]::text[]`);
+  if (selectedGenres.length > 0) conditions.push(sql`${books.genres} @> ARRAY[${sql.join(selectedGenres.map(g => sql`${g}`), sql`, `)}]::text[]`);
   if (language) conditions.push(sql`${books.language} = ${language}`);
   if (q) conditions.push(sql`(lower(${books.title}) like ${"%" + q.toLowerCase() + "%"} or lower(${books.author}) like ${"%" + q.toLowerCase() + "%"})`);
 

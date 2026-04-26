@@ -1,0 +1,17 @@
+<svg viewBox="0 0 512 512" width="1024" height="1024" xmlns="http://www.w3.org/2000/svg">
+  
+  <rect x="0" y="0" width="512" height="512" rx="100" ry="100" fill="#1F2937"></rect>
+  
+  <path d="M140 270 C140 170 372 170 372 270" fill="none" stroke="#FDFBF6" stroke-width="26" stroke-linecap="round"></path>
+  
+  <rect x="110" y="258" width="52" height="80" rx="22" fill="#6B7280"></rect>
+  
+  <rect x="350" y="258" width="52" height="80" rx="22" fill="#6B7280"></rect>
+  
+  <line x1="196" y1="390" x2="196" y2="380" stroke="#CAD5E2" stroke-width="10" stroke-linecap="round" opacity="0.4"></line>
+  <line x1="220" y1="390" x2="220" y2="366" stroke="#CAD5E2" stroke-width="10" stroke-linecap="round" opacity="0.55"></line>
+  <line x1="244" y1="390" x2="244" y2="356" stroke="#6B7280" stroke-width="10" stroke-linecap="round" opacity="0.8"></line>
+  <line x1="268" y1="390" x2="268" y2="364" stroke="#CAD5E2" stroke-width="10" stroke-linecap="round" opacity="0.6"></line>
+  <line x1="292" y1="390" x2="292" y2="374" stroke="#CAD5E2" stroke-width="10" stroke-linecap="round" opacity="0.45"></line>
+  <line x1="316" y1="390" x2="316" y2="382" stroke="#CAD5E2" stroke-width="10" stroke-linecap="round" opacity="0.35"></line>
+</svg>

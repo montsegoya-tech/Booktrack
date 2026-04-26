@@ -1,0 +1,31 @@
+<svg viewBox="0 0 512 512" width="1024" height="1024" xmlns="http://www.w3.org/2000/svg">
+  
+  <rect x="0" y="0" width="512" height="512" rx="100" ry="100" fill="#1F2937"></rect>
+  
+  <rect x="130" y="110" width="252" height="292" rx="18" fill="#374151"></rect>
+  
+  <rect x="148" y="132" width="216" height="248" rx="8" fill="#FDFBF6"></rect>
+  
+  <rect x="235" y="388" width="42" height="6" rx="3" fill="#E3E1E1" opacity="0.5"></rect>
+  
+  <line x1="256" y1="150" x2="256" y2="362" stroke="#CAD5E2" stroke-width="2" opacity="0.4"></line>
+  
+  <rect x="158" y="168" width="86" height="6" rx="2" fill="#6B7280" opacity="0.5"></rect>
+  <rect x="158" y="184" width="86" height="5" rx="2" fill="#CAD5E2" opacity="0.4"></rect>
+  <rect x="158" y="198" width="70" height="5" rx="2" fill="#CAD5E2" opacity="0.35"></rect>
+  <rect x="158" y="212" width="80" height="5" rx="2" fill="#CAD5E2" opacity="0.3"></rect>
+  <rect x="158" y="226" width="60" height="5" rx="2" fill="#CAD5E2" opacity="0.25"></rect>
+  <rect x="158" y="244" width="86" height="5" rx="2" fill="#CAD5E2" opacity="0.3"></rect>
+  <rect x="158" y="258" width="76" height="5" rx="2" fill="#CAD5E2" opacity="0.25"></rect>
+  
+  <rect x="268" y="168" width="86" height="6" rx="2" fill="#CAD5E2" opacity="0.4"></rect>
+  <rect x="268" y="184" width="80" height="5" rx="2" fill="#CAD5E2" opacity="0.35"></rect>
+  <rect x="268" y="198" width="86" height="5" rx="2" fill="#CAD5E2" opacity="0.3"></rect>
+  <rect x="268" y="212" width="60" height="5" rx="2" fill="#CAD5E2" opacity="0.25"></rect>
+  <rect x="268" y="226" width="76" height="5" rx="2" fill="#CAD5E2" opacity="0.3"></rect>
+  <rect x="268" y="244" width="86" height="5" rx="2" fill="#CAD5E2" opacity="0.25"></rect>
+  <rect x="268" y="258" width="68" height="5" rx="2" fill="#CAD5E2" opacity="0.2"></rect>
+  
+  <rect x="158" y="340" width="196" height="4" rx="2" fill="#E3E1E1" opacity="0.25"></rect>
+  <rect x="158" y="340" width="110" height="4" rx="2" fill="#6B7280" opacity="0.6"></rect>
+</svg>

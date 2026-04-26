@@ -109,7 +109,7 @@ const [language, setLanguage] = useState<Language | null>((book.language as Lang
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const data = await res.json() as { updated: boolean; message?: string };
       if (data.updated) {
-        toast.success("Datos completados desde Open Library");
+        toast.success("Datos completados");
         router.refresh();
       } else {
         toast.info(data.message ?? "No hay datos nuevos disponibles");

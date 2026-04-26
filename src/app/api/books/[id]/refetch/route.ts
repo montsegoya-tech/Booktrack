@@ -42,6 +42,14 @@ export async function POST(
     const stillMissingGenres = !book.genres?.length && !updates.genres;
 
     if (stillMissingSynopsis || stillMissingGenres) {
+      if (!process.env.GOOGLE_BOOKS_API_KEY) {
+        console.warn("[refetch] GOOGLE_BOOKS_API_KEY not set — skipping Google Books");
+        return Response.json({
+          updated: false,
+          message: "Configura GOOGLE_BOOKS_API_KEY en Vercel para usar Google Books",
+        });
+      }
+
       try {
         const queries = book.isbn
           ? [
@@ -59,7 +67,6 @@ export async function POST(
           for (const volume of gbRes.items ?? []) {
             const info = volume.volumeInfo;
 
-            // If the search result has no description, fetch full volume details
             let description = info.description;
             let categories = info.categories;
             if ((stillMissingSynopsis && !updates.synopsis && !description) ||
@@ -85,8 +92,8 @@ export async function POST(
             ) break outer;
           }
         }
-      } catch {
-        // Google Books also failed
+      } catch (err) {
+        console.error("[refetch] Google Books error:", err);
       }
     }
 

@@ -121,7 +121,7 @@ const rated = allBooks.filter((b) => b.rating !== null);
         </div>
       </header>
 
-      <div className="p-8 max-w-4xl mx-auto space-y-8">
+      <div className="p-4 md:p-8 max-w-4xl mx-auto space-y-8">
 
         {/* Summary cards */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
@@ -160,7 +160,7 @@ const rated = allBooks.filter((b) => b.rating !== null);
         )}
 
 {/* Rating + pages */}
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {avgRating && (
             <div className="rounded-3xl border border-border bg-card p-5 flex items-center gap-4 shadow-sm">
               <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center shrink-0">
@@ -208,13 +208,13 @@ const rated = allBooks.filter((b) => b.rating !== null);
                     <User className="w-3.5 h-3.5 text-primary" />
                   </div>
                   <span className="text-sm flex-1 truncate">{name}</span>
-                  <div className="w-32 h-2.5 rounded-full bg-black/10 overflow-hidden shrink-0">
+                  <div className="hidden sm:block w-32 h-2.5 rounded-full bg-black/10 overflow-hidden shrink-0">
                     <div
                       className="h-full rounded-full bg-primary transition-all"
                       style={{ width: `${(count / maxAuthorCount) * 100}%` }}
                     />
                   </div>
-                  <span className="text-xs text-muted-foreground w-24 text-right shrink-0">
+                  <span className="text-xs text-muted-foreground w-16 sm:w-24 text-right shrink-0">
                     {count} {count === 1 ? "libro" : "libros"}{avg ? ` · ★${avg}` : ""}
                   </span>
                 </div>
@@ -268,11 +268,11 @@ function ProgressRow({ label, count, total, color }: { label: string; count: num
   const pct = total > 0 ? Math.round((count / total) * 100) : 0;
   return (
     <div className="flex items-center gap-3">
-      <span className="text-sm w-32 shrink-0 truncate">{label}</span>
+      <span className="text-sm w-20 sm:w-32 shrink-0 truncate">{label}</span>
       <div className="flex-1 h-2.5 rounded-full bg-black/10 overflow-hidden">
         <div className={`h-full rounded-full ${color} transition-all`} style={{ width: `${pct}%` }} />
       </div>
-      <span className="text-xs text-muted-foreground w-16 text-right">{count} · {pct}%</span>
+      <span className="text-xs text-muted-foreground w-14 sm:w-16 text-right">{count} · {pct}%</span>
     </div>
   );
 }

@@ -78,9 +78,9 @@ export default function BookCover({ bookId, coverUrl, title }: { bookId: string;
   }
 
   return (
-    <div className="relative w-36 shrink-0">
+    <div className="relative w-28 sm:w-36 shrink-0">
       {/* Cover image */}
-      <div className="relative w-36 aspect-[2/3] rounded-xl overflow-hidden bg-surface border border-border shadow-2xl group">
+      <div className="relative w-28 sm:w-36 aspect-[2/3] rounded-xl overflow-hidden bg-surface border border-border shadow-2xl group">
         {draft ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img src={draft} alt={title} className="absolute inset-0 w-full h-full object-cover" />

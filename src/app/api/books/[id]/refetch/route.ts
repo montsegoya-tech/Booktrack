@@ -97,7 +97,7 @@ export async function POST(
     const [updated] = await db
       .update(books)
       .set({ ...updates, updatedAt: new Date() })
-      .where(eq(books.id, id))
+      .where(and(eq(books.id, id), eq(books.userId, session.userId)))
       .returning();
 
     return Response.json({ updated: true, book: updated });

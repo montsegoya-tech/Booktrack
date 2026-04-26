@@ -36,6 +36,7 @@ Single-user app. Una tabla `books` en Supabase. Auth via cookie (iron-session). 
 | `DATABASE_URL` | Supabase connection string (Transaction pooler) |
 | `APP_PASSWORD` | Login password for the app |
 | `SESSION_SECRET` | iron-session encryption key (min 32 chars) |
+| `CRON_SECRET` | Secret para el endpoint `/api/keepalive` — genera con `openssl rand -hex 32` |
 
 ## Design System
 

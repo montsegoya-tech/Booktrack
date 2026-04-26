@@ -89,7 +89,7 @@ export default async function LibraryPage({
         <Topbar bookCount={count} username={session.username} />
       </Suspense>
 
-      <div className="flex-1 p-6 space-y-4">
+      <div className="flex-1 p-4 md:p-6 space-y-4">
         <div className="flex items-center justify-between gap-4">
           <Suspense>
             <FilterBar />

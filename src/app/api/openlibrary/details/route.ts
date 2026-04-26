@@ -1,8 +1,12 @@
 import { NextRequest } from "next/server";
 import { getWorkDetails } from "@/lib/openlibrary/client";
 import { extractDescription } from "@/lib/openlibrary/helpers";
+import { getSession } from "@/lib/auth/session";
 
 export async function GET(request: NextRequest) {
+  const session = await getSession();
+  if (!session.isLoggedIn) return Response.json({ error: "No autorizado" }, { status: 401 });
+
   const id = request.nextUrl.searchParams.get("id");
   if (!id) return Response.json({ error: "id requerido" }, { status: 400 });
 

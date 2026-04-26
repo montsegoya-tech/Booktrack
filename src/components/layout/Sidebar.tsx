@@ -53,7 +53,7 @@ export default function Sidebar({ username }: { username?: string }) {
   }
 
   return (
-    <aside className="w-60 shrink-0 flex flex-col h-screen border-r border-border sidebar-volumetric sticky top-0 rounded-tr-2xl">
+    <aside className="hidden md:flex md:w-60 shrink-0 flex-col h-screen border-r border-border sidebar-volumetric sticky top-0 rounded-tr-2xl">
       {/* Logo */}
       <div className="px-4 py-5">
         <Link href="/library" className="flex items-center gap-2 group">

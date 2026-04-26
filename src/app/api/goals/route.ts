@@ -26,7 +26,7 @@ export async function POST(request: NextRequest) {
   if (!session.isLoggedIn) return Response.json({ error: "No autorizado" }, { status: 401 });
 
   const { year, goal } = await request.json() as { year: number; goal: number };
-  if (!year || !goal || goal < 1 || goal > 9999) {
+  if (!year || year < 2000 || year > 2100 || !goal || goal < 1 || goal > 9999) {
     return Response.json({ error: "Inválido" }, { status: 400 });
   }
 

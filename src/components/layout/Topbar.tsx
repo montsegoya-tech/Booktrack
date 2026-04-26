@@ -17,7 +17,7 @@ export default function Topbar({ bookCount, username }: { bookCount: number; use
   const initial = username?.[0]?.toUpperCase() ?? "?";
 
   return (
-    <header className="border-b border-border flex items-center px-6 py-5 gap-4 bg-white sticky top-0 z-10">
+    <header className="border-b border-border flex items-center px-4 md:px-6 py-4 md:py-5 gap-4 bg-white sticky top-0 z-10">
       <div className="relative flex-1 max-w-lg mx-auto">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
         <Input

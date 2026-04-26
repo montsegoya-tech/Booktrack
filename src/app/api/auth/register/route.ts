@@ -18,10 +18,16 @@ const sessionOptions = {
 };
 
 export async function POST(request: NextRequest) {
+  // Single-user app: only allow registration if no users exist yet
+  const [anyUser] = await db.select({ id: users.id }).from(users).limit(1);
+  if (anyUser) {
+    return NextResponse.json({ error: "El registro no está disponible" }, { status: 403 });
+  }
+
   const { username, password } = await request.json();
 
-  if (!username?.trim() || !password || password.length < 6) {
-    return NextResponse.json({ error: "La contraseña debe tener al menos 6 caracteres" }, { status: 400 });
+  if (!username?.trim() || !password || password.length < 8) {
+    return NextResponse.json({ error: "La contraseña debe tener al menos 8 caracteres" }, { status: 400 });
   }
 
   const existing = await db

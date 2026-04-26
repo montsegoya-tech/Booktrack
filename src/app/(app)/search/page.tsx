@@ -43,7 +43,7 @@ export default async function SearchPage({
   }
 
   return (
-    <div className="p-6 max-w-3xl mx-auto space-y-6">
+    <div className="p-4 md:p-6 max-w-3xl mx-auto space-y-6">
       <div className="space-y-1">
         <h1 className="font-heading text-2xl font-bold">Buscar libros</h1>
         <p className="text-[#0f172a] text-sm">Busca en Open Library y Google Books simultáneamente</p>

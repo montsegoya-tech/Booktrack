@@ -36,10 +36,10 @@ export default async function BookDetailPage({
         <DeleteBookButton bookId={book.id} className="ml-auto" />
       </div>
 
-      <div className="p-6 max-w-5xl mx-auto">
+      <div className="p-4 md:p-6 max-w-5xl mx-auto">
         <div className="flex flex-col gap-6">
           {/* Top row: cover + title/meta */}
-          <div className="flex gap-6 items-start">
+          <div className="flex flex-col sm:flex-row gap-6 items-start">
             <BookCover bookId={book.id} coverUrl={book.coverUrl} title={book.title} />
             <div className="space-y-2 pt-1">
               <EditableBookTitle bookId={book.id} title={book.title} />

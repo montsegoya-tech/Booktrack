@@ -11,6 +11,18 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "Booktrack",
   description: "Tu lista de lectura personal",
+  icons: {
+    icon: [
+      { url: "/png/icon-192.png", sizes: "192x192", type: "image/png" },
+      { url: "/png/icon-512.png", sizes: "512x512", type: "image/png" },
+    ],
+    apple: [
+      { url: "/png/icon-180.png", sizes: "180x180", type: "image/png" },
+      { url: "/png/icon-167.png", sizes: "167x167", type: "image/png" },
+      { url: "/png/icon-152.png", sizes: "152x152", type: "image/png" },
+      { url: "/png/icon-120.png", sizes: "120x120", type: "image/png" },
+    ],
+  },
 };
 
 export default function RootLayout({

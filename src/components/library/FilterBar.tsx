@@ -9,22 +9,28 @@ export default function FilterBar() {
   const router = useRouter();
 
   const status = searchParams.get("status");
-  const genre = searchParams.get("genre");
+  const genres = searchParams.getAll("genre");
   const format = searchParams.get("format");
   const language = searchParams.get("language");
 
-  const active = [
-    status && { key: "status", label: statusLabel(status) },
-    genre && { key: "genre", label: translateGenre(genre) },
-    format && { key: "format", label: formatLabel(format) },
-    language && { key: "language", label: languageLabel(language) },
-  ].filter(Boolean) as { key: string; label: string }[];
+  const active: { key: string; value: string; label: string }[] = [
+    ...(status ? [{ key: "status", value: status, label: statusLabel(status) }] : []),
+    ...genres.map((g) => ({ key: "genre", value: g, label: translateGenre(g) })),
+    ...(format ? [{ key: "format", value: format, label: formatLabel(format) }] : []),
+    ...(language ? [{ key: "language", value: language, label: languageLabel(language) }] : []),
+  ];
 
   if (active.length === 0) return null;
 
-  function remove(key: string) {
+  function remove(key: string, value: string) {
     const p = new URLSearchParams(searchParams.toString());
-    p.delete(key);
+    if (key === "genre") {
+      const remaining = p.getAll("genre").filter((g) => g !== value);
+      p.delete("genre");
+      remaining.forEach((g) => p.append("genre", g));
+    } else {
+      p.delete(key);
+    }
     p.delete("page");
     router.push(`/library?${p.toString()}`);
   }
@@ -34,8 +40,8 @@ export default function FilterBar() {
       <span className="text-xs text-muted-foreground">Filtros:</span>
       {active.map((f) => (
         <button
-          key={f.key}
-          onClick={() => remove(f.key)}
+          key={`${f.key}-${f.value}`}
+          onClick={() => remove(f.key, f.value)}
           className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-primary/10 text-primary text-xs hover:bg-primary/20 transition-colors"
         >
           {f.label}

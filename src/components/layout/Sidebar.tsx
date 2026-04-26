@@ -54,6 +54,19 @@ export default function Sidebar({ username }: { username?: string }) {
     return `/library?${p.toString()}`;
   }
 
+  function buildGenreUrl(genre: string) {
+    const p = new URLSearchParams(searchParams.toString());
+    const current = p.getAll("genre");
+    p.delete("genre");
+    if (current.includes(genre)) {
+      current.filter((g) => g !== genre).forEach((g) => p.append("genre", g));
+    } else {
+      [...current, genre].forEach((g) => p.append("genre", g));
+    }
+    p.delete("page");
+    return `/library?${p.toString()}`;
+  }
+
   return (
     <aside className="hidden md:flex md:w-60 shrink-0 flex-col h-screen border-r border-border sidebar-volumetric sticky top-0 rounded-tr-2xl">
       {/* Logo */}
@@ -94,14 +107,15 @@ export default function Sidebar({ username }: { username?: string }) {
         <div className="pt-4">
           <p className="px-3 text-xs font-bold text-[#ce433d] uppercase tracking-wider mb-1 border-0 outline-none shadow-none no-text-shadow">Géneros</p>
           {GENRES.map((g) => {
-            const current = searchParams.get("genre") ?? "";
+            const activeGenres = searchParams.getAll("genre");
+            const isActive = activeGenres.includes(g.value);
             return (
               <Link
                 key={g.value}
-                href={buildFilterUrl("genre", current === g.value ? "" : g.value)}
+                href={buildGenreUrl(g.value)}
                 className={cn(
                   "flex items-center px-3 py-1.5 rounded-md text-sm transition-colors",
-                  current === g.value
+                  isActive
                     ? "bg-accent text-foreground font-medium shadow-sm"
                     : "text-sidebar-foreground/70 hover:text-foreground hover:bg-accent"
                 )}

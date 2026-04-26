@@ -23,7 +23,7 @@ const PAGE_SIZE = 18;
 export default async function LibraryPage({
   searchParams,
 }: {
-  searchParams: Promise<{ status?: string; genre?: string; format?: string; language?: string; view?: string; q?: string; page?: string }>;
+  searchParams: Promise<{ status?: string; genre?: string | string[]; format?: string; language?: string; view?: string; q?: string; page?: string }>;
 }) {
   const session = await getSession();
   if (!session.isLoggedIn) redirect("/login");
@@ -32,10 +32,12 @@ export default async function LibraryPage({
   const { status, genre, format, language, view = "grid", q, page: pageParam } = params;
   const page = Math.max(1, parseInt(pageParam ?? "1", 10) || 1);
 
+  const selectedGenres = Array.isArray(genre) ? genre : genre ? [genre] : [];
+
   const conditions = [eq(books.userId, session.userId)];
   if (status) conditions.push(eq(books.status, status as BookSelect["status"]));
   if (format) conditions.push(eq(books.format, format as BookSelect["format"]));
-  if (genre) conditions.push(sql`${books.genres} @> ARRAY[${genre}]::text[]`);
+  if (selectedGenres.length > 0) conditions.push(sql`${books.genres} && ARRAY[${sql.join(selectedGenres.map(g => sql`${g}`), sql`, `)}]::text[]`);
   if (language) conditions.push(sql`${books.language} = ${language}`);
   if (q) conditions.push(sql`(lower(${books.title}) like ${"%" + q.toLowerCase() + "%"} or lower(${books.author}) like ${"%" + q.toLowerCase() + "%"})`);
 
@@ -89,7 +91,7 @@ export default async function LibraryPage({
         <Topbar bookCount={count} username={session.username} />
       </Suspense>
 
-      <div className="flex-1 p-4 md:p-6 space-y-4">
+      <div className="flex-1 p-4 pb-24 md:p-6 md:pb-6 space-y-4">
         <div className="flex items-center justify-between gap-4">
           <Suspense>
             <FilterBar />

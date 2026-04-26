@@ -107,8 +107,10 @@ const [language, setLanguage] = useState<Language | null>((book.language as Lang
     try {
       const res = await fetch(`/api/books/${book.id}/refetch`, { method: "POST" });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const data = await res.json() as { updated: boolean; message?: string };
+      const data = await res.json() as { updated: boolean; message?: string; book?: BookSelect };
       if (data.updated) {
+        if (data.book?.synopsis) setSynopsisDraft(data.book.synopsis);
+        if (data.book?.genres?.length) setGenres(data.book.genres);
         toast.success("Datos completados");
         router.refresh();
       } else {
